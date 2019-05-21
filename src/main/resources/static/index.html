@@ -1,55 +1,69 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <title>Spring Boot WebSocket Chat Application</title>
-    <link rel="stylesheet" href="/css/main.css" />
+    <title>Travel Chatbot Assistant</title>
+    <link rel="stylesheet" href="./css/app.css"/>
+    <link rel="stylesheet" href="./css/common.css"/>
 </head>
 <body>
 <noscript>
     <h2>Sorry! Your browser doesn't support Javascript</h2>
 </noscript>
-
-<div id="username-page" class="hidden">
-    <div class="username-page-container">
-        <h1 class="title">Type your username</h1>
-        <form id="usernameForm" name="usernameForm">
-            <div class="form-group">
-                <input type="text" id="name" placeholder="Username" autocomplete="off" class="form-control" />
-            </div>
-            <div class="form-group">
-                <button type="submit" class="accent username-submit">Start Chatting</button>
-            </div>
-        </form>
+<div class="main">
+    <div class="header">
+        <p class="messenger-bot-name margin-none">Brian.ai</p>
+        <p class="messenger-bot-description margin-none">Your Virtual Travel Buddy!</p>
     </div>
-</div>
+    <div class="messenger">
+        <div class="left-panel">
+            <div class="options">
+                <li class="option selected">
+                    <div class="icon">
+                        <div class="bot">
 
-<div id="chat-page">
-    <div class="chat-container">
-        <div class="chat-header">
-            <h2>Spring WebSocket Chat Demo</h2>
-        </div>
-        <div class="connecting">
-            Connecting...
-        </div>
-        <div class="chat-box-wrapper">
-            <ul id="message-box">
+                        </div>
+                    </div>
+                    <div class="description">
+                        <p class="title">Ask Brian.Ai</p>
+                        <p class="subtitle">Your Virtual Travel Buddy!</p>
+                    </div>
+                </li>
+                <li class="option">
+                    <div class="icon">
+                        <div class="saved">
 
-            </ul>
+                        </div>
+                    </div>
+                    <div class="description">
+                        <p class="title">Saved Places</p>
+                        <p class="subtitle">Your Bookmarked Places</p>
+                    </div>
+                </li>
+            </div>
         </div>
-        <form id="messageForm" name="messageForm">
-            <div class="form-group">
-                <div class="input-group clearfix">
-                    <input type="text" id="message" placeholder="Type a message..." autocomplete="off" class="form-control"/>
-                    <button type="submit" class="primary">Send</button>
+        <div class="right-panel">
+            <div class="messages">
+                <div class="connecting">
+                    Connecting...
+                </div>
+                <div style="height: 100%; overflow: auto;">
+                <ul id="message-box">
+
+                </ul>
                 </div>
             </div>
-        </form>
+            <div class="chat">
+                <form class="chat-form" id="form">
+                    <textarea class="chat-form-input" placeholder="Type your message here..." rows="1" maxlength="640" id="textarea"></textarea>
+                    <button type="submit" class="chat-button hidden" id="send"></button>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-<script src="/js/main.js"></script>
+<script src="./js/main.js"></script>
 </body>
 </html>

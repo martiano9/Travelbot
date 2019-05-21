@@ -1,0 +1,40 @@
+.margin-none {
+    margin: 0 !important;
+}
+
+.hidden {
+    display: none;
+}
+
+textarea::-webkit-input-placeholder {
+    color: #848484;
+}
+
+textarea:-moz-placeholder { /* Firefox 18- */
+    color: #848484;
+}
+
+textarea::-moz-placeholder {  /* Firefox 19+ */
+    color: #848484;
+}
+
+textarea:-ms-input-placeholder {
+    color: #848484;
+}
+
+textarea::placeholder {
+    color: #848484;
+}
+
+button {
+    outline: none;
+}
+
+.no-list {
+    list-style: none;
+}
+
+.font-arial {
+    font-family: -apple-system,helvetica,arial,sans-serif;
+    font-weight: 300;
+}
