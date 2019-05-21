@@ -1,5 +1,6 @@
 package edu.utas.travelbot.controller;
 
+import edu.utas.travelbot.model.Bot;
 import edu.utas.travelbot.model.ChatMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,10 +20,12 @@ public class ChatController {
 
     private static final Logger logger = LoggerFactory.getLogger(WebSocketEventListener.class);
     private SimpMessagingTemplate messagingTemplate;
+    private Bot bot;
 
     @Autowired
     public ChatController(SimpMessagingTemplate messagingTemplate) {
         this.messagingTemplate = messagingTemplate;
+        this.bot = new Bot();
     }
 
     @MessageMapping("/greeting")

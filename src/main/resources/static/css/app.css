@@ -216,10 +216,34 @@ body {
 }
 
 .chat-button {
-    background: url('../img/messenger.svg') no-repeat -185px -40px;
-    width: 31px;
+     background: url('../img/messenger.svg') no-repeat -185px -40px;
+     width: 31px;
+     height: 30px;
+     border-width: 0px;
+}
+
+.speak-button.enabled {
+    background-color: DodgerBlue; /* Blue background */
+    border: none; /* Remove borders */
+    color: white; /* White text */
+    font-size: 16px; /* Set a font size */
+    cursor: pointer; /* Mouse pointer on hover */
+    width: 30px;
     height: 30px;
-    border-width: 0px;
+    border-radius: 15px;
+    margin-left: 5px;
+}
+
+.speak-button.disabled {
+    background-color: GrayText; /* Blue background */
+    border: none; /* Remove borders */
+    color: white; /* White text */
+    font-size: 16px; /* Set a font size */
+    cursor: pointer; /* Mouse pointer on hover */
+    width: 30px;
+    height: 30px;
+    border-radius: 15px;
+    margin-left: 5px;
 }
 
 .connecting {

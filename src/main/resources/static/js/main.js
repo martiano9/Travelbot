@@ -1,6 +1,5 @@
 'use strict';
 
-var usernamePage = document.querySelector('#username-page');
 var chatPage = document.querySelector('#chat-page');
 var usernameForm = document.querySelector('#usernameForm');
 var messageForm = document.querySelector('#form');
@@ -8,15 +7,54 @@ var messageInput = document.querySelector('#message');
 var messageArea = document.querySelector('#message-box');
 var send = document.querySelector('#send');
 var textarea = document.querySelector('#textarea');
+var speakButton = document.querySelector('#speak');
+var speakEnabled = false;
 var connectingElement = document.querySelector('.connecting');
 
-var stompClient = null;
-var username = null;
+// Web Speech API
+var note = '';
+var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
+var recognition = new SpeechRecognition();
+recognition.onstart = function() {
+    // connectingElement.textContent = 'Voice recognition activated. Try speaking into the microphone.';
+    note = '';
+};
 
-var colors = [
-    '#2196F3', '#32c787', '#00BCD4', '#ff5652',
-    '#ffc107', '#ff85af', '#FF9800', '#39bbb0'
-];
+recognition.onend = function() {
+
+    speakButton.classList.remove('enabled');
+    speakButton.classList.add('disabled');
+    speakEnabled = false;
+    recognition.stop();
+    send.click();
+    // connectingElement.textContent = 'You were quiet for a while so voice recognition turned itself off.';
+};
+
+recognition.onerror = function(event) {
+    console.log(event);
+    if(event.error == 'no-speech') {
+        connectingElement.textContent = 'No speech was detected. Try again.';
+    }
+};
+
+recognition.onresult = function(event) {
+
+    // event is a SpeechRecognitionEvent object.
+    // It holds all the lines we have captured so far.
+    // We only need the current one.
+    var current = event.resultIndex;
+
+    // Get a transcript of what was said.
+    var transcript = event.results[current][0].transcript;
+
+    // Add the current transcript to the contents of our Note.
+    note += transcript;
+    console.log(note);
+    textarea.value = note;
+};
+
+// STOMP socket API
+var stompClient = null;
 
 /**
  * Initiate connection with server
@@ -54,7 +92,7 @@ function sendMessage(event) {
     var messageContent = textarea.value.trim();
     if(messageContent && stompClient) {
         stompClient.send("/app/chat", {}, messageContent);
-        textarea.value = '';
+        textarea.value = null;
         send.classList.add('hidden');
     }
     event.preventDefault();
@@ -84,6 +122,21 @@ function onMessageReceived(payload) {
     messageArea.appendChild(messageElement);
     messageArea.scrollTop = messageArea.scrollHeight;
 }
+
+speakButton.addEventListener('click', function () {
+    if (speakEnabled) {
+        speakButton.classList.remove('enabled');
+        speakButton.classList.add('disabled');
+        speakEnabled = false;
+        recognition.stop();
+    } else {
+        speakButton.classList.add('enabled');
+        speakButton.classList.remove('disabled');
+        speakEnabled = true;
+        note = '';
+        recognition.start();
+    }
+});
 
 messageForm.addEventListener('submit', sendMessage, true)
 document.addEventListener('load', connect, true);
