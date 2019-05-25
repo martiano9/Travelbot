@@ -4,6 +4,8 @@ public class ChatMessage {
     private MessageType type;
     private String content;
     private String sender;
+    private String extraData;
+    private String stemmedQuestion;
 
     public enum MessageType {
         CHAT,
@@ -35,5 +37,21 @@ public class ChatMessage {
 
     public void setSender(String sender) {
         this.sender = sender;
+    }
+
+    public String getExtraData() {
+        return extraData;
+    }
+
+    public void setExtraData(String extraData) {
+        this.extraData = extraData;
+    }
+
+    public String getStemmedQuestion() {
+        return stemmedQuestion;
+    }
+
+    public void setStemmedQuestion(String str) {
+        this.stemmedQuestion = str;
     }
 }

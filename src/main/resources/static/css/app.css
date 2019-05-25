@@ -47,9 +47,11 @@ body {
     border-top-right-radius: 3px;
     border-color: rgba(0,0,0,0.5);
     border-width: 1px;
+    overflow: hidden;
 }
 
 .header {
+    background: #2f9bdb;
     flex-basis: 60px;
     padding: 13px 15px;
     text-overflow: ellipsis;
@@ -60,7 +62,7 @@ body {
 }
 
 .header .messenger-bot-name {
-    color: #506066;
+    color: white;
     font-family: -apple-system,helvetica,arial,sans-serif;
     font-weight: bold;
     box-shadow: none;
@@ -68,7 +70,7 @@ body {
 
 .header .messenger-bot-description {
     font-weight: 400;
-    color: #7f97a1;
+    color: #fafafa;
     font-size: 12px !important;
     box-shadow: none;
 }
@@ -90,7 +92,6 @@ body {
     float: left;
     height: 100%;
     background-color: white;
-    align-self: stretch;
 }
 
 .right-panel {
@@ -262,6 +263,13 @@ body {
     padding: 15px;
     height: 100%
 }
+
+#log-box {
+    padding-left: 15px;
+    overflow: auto;
+    height: calc(100% - 57px - 56px - 15px);
+}
+
 #message-box>li {
     margin-bottom: 12px;
     clear: both;
@@ -287,4 +295,10 @@ body {
 .user-chat-component p, .bot-chat-component p, .giphy-response {
     max-width: 50%;
     word-wrap: break-word;
+}
+
+#map {
+    width: 50%;
+    height: 180px;
+    margin-top: 10px;
 }
