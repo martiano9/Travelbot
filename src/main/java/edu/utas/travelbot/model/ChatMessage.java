@@ -13,6 +13,10 @@ public class ChatMessage {
         LEAVE,
         REPLY,
         QUERY,
+        LOADING,
+        FINISH,
+        RESULT,
+        DETAIL,
     }
 
     public MessageType getType() {

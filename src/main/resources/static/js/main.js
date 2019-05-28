@@ -17,11 +17,6 @@ var connectingElement = document.querySelector('.connecting');
  *  ==================================================
  */
 var pos = {};
-if (navigator.geolocation) {
-    pos = navigator.geolocation.getCurrentPosition(function (position) {
-        pos = position;
-    });
-}
 
 var map;
 function initMap() {
@@ -164,11 +159,24 @@ var greeted = false;
  */
 function connect(event) {
     if (!connected) {
-        var socket = new SockJS('/connect');
-        stompClient = Stomp.over(socket);
+        if (navigator.geolocation) {
+            pos = navigator.geolocation.getCurrentPosition(function (position) {
+                pos = position;
 
-        stompClient.connect({}, onConnected, onError);
-        connected = true;
+                var socket = new SockJS('/connect');
+                stompClient = Stomp.over(socket);
+
+                stompClient.connect({}, onConnected, onError);
+                connected = true;
+            });
+        } else {
+            var socket = new SockJS('/connect');
+            stompClient = Stomp.over(socket);
+
+            stompClient.connect({}, onConnected, onError);
+            connected = true;
+        }
+
     }
 
 }
@@ -182,9 +190,10 @@ function onConnected() {
 
         // Tell your username to the server
         stompClient.send("/app/greeting",
-            {},
+            {lat: pos.coords.latitude, long: pos.coords.longitude},
             JSON.stringify({})
         );
+        console.log(pos);
 
         connectingElement.classList.add('hidden');
         greeted = true;
@@ -217,18 +226,156 @@ function onError(error) {
 function sendMessage(event) {
     var messageContent = textarea.value.trim();
     if(messageContent && stompClient) {
-        stompClient.send("/app/chat", pos, messageContent);
+        stompClient.send("/app/chat", {lat: pos.coords.latitude, long: pos.coords.longitude}, messageContent);
         textarea.value = null;
         send.classList.add('hidden');
     }
     event.preventDefault();
 }
 
+function addDetail(result) {
+    var messageElement = document.createElement('li');
+    messageElement.classList.add('no-list');
+    messageElement.classList.add('font-arial');
+
+    var information = document.createElement('div');
+    information.innerHTML += "<div><b>Name: </b>"+result.name+"</div>";
+    information.innerHTML += "<div><b>Address: </b>"+result.address+"</div>";
+    information.innerHTML += "<div><b>Phone: </b>"+result.phone+"</div>";
+    information.innerHTML += "<div><b>Rating: </b>"+result.rating+"</div>";
+    information.innerHTML += "<div><b>Price: </b>"+result.price+"</div>";
+
+    messageElement.appendChild(information);
+
+    var mapElement = document.createElement('div');
+    mapElement.setAttribute("id", "map");
+
+    var directionsService = new google.maps.DirectionsService;
+    var directionsDisplay = new google.maps.DirectionsRenderer;
+    var myCenter = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
+    var map = new google.maps.Map(mapElement, {
+        center: myCenter,
+        zoom: 16
+    });
+    var marker=new google.maps.Marker({
+        position:myCenter
+    }); //initialize map, set the center
+
+    directionsDisplay.setMap(map);
+
+    directionsService.route({
+        origin: myCenter,
+        destination: new google.maps.LatLng(result.lat, result.lng),
+        travelMode: 'DRIVING'
+    }, function(response, status) {
+        if (status === 'OK') {
+            console.log(response);
+            directionsDisplay.setDirections(response);
+        } else {
+            window.alert('Directions request failed due to ' + status);
+        }
+    });
+
+
+    messageElement.appendChild(mapElement);
+    messageArea.appendChild(messageElement);
+    messageArea.scrollTop = messageArea.scrollHeight;
+}
+
+function addResultSlide(result) {
+    var messageElement = document.createElement('li');
+    messageElement.classList.add('no-list');
+    messageElement.classList.add('slide');
+    messageElement.classList.add('font-arial');
+
+    var inlineList = document.createElement('div');
+    inlineList.classList.add('inline-list');
+    result.forEach(function(place){
+        console.log(place);
+        var item = document.createElement('div');
+        item.classList.add('restaurant-item')
+
+        var container = document.createElement('div');
+        container.classList.add('restaurant-container')
+
+        var img = document.createElement('img');
+        if (place.hasOwnProperty('photo')) {
+            img.src = "https://maps.googleapis.com/maps/api/place/photo?photoreference="+place.photo+"&sensor=false&maxheight=320&maxwidth=400&key=AIzaSyDiKeAYPM2LbwtTqUrg3BvBJvrb9u1AgKY";
+        }
+        container.appendChild(img);
+
+        var information = document.createElement('div');
+        information.classList.add('information')
+
+        var h3 = document.createElement('h3');
+        h3.textContent = place.name;
+        information.appendChild(h3);
+
+        var h4 = document.createElement('h4');
+        h4.textContent = place.address;
+        information.appendChild(h4);
+
+        container.appendChild(information);
+        item.appendChild(container);
+        inlineList.appendChild(item);
+    });
+    messageElement.appendChild(inlineList);
+    messageArea.appendChild(messageElement);
+    messageArea.scrollTop = messageArea.scrollHeight;
+
+    createSlick();
+}
+
+function createSlick(){
+    $(".inline-list").not('.slick-initialized').slick({
+        slidesToShow: 2,
+        slidesToScroll: 2,
+        dots: true,
+    });
+
+}
+
 
 function onMessageReceived(payload) {
     // console.log(payload);
     var message = JSON.parse(payload.body);
-    console.log(message.stemmedQuestion);
+    if (message.type === 'RESULT') {
+        addResultSlide(JSON.parse(message.content));
+        return;
+    }
+
+    if (message.type === 'DETAIL') {
+        addDetail(JSON.parse(message.content));
+        return;
+    }
+
+    // If receiving loading message, display spinner
+    if (message.type === 'LOADING') {
+        var loading = document.createElement('li');
+        loading.classList.add('bot-chat-component');
+
+        loading.classList.add('spinner');
+        var bounce1 = document.createElement('div');
+        bounce1.classList.add('bounce1');
+        loading.appendChild(bounce1);
+        var bounce2 = document.createElement('div');
+        bounce2.classList.add('bounce2');
+        loading.appendChild(bounce2);
+        var bounce3 = document.createElement('div');
+        bounce3.classList.add('bounce3');
+        loading.appendChild(bounce3);
+        messageArea.appendChild(loading);
+        messageArea.scrollTop = messageArea.scrollHeight;
+        return;
+    }
+
+    // If receiving finish message, remove spinner class
+    if (message.type === 'FINISH') {
+        var loading = document.querySelector('.spinner');
+        loading.parentNode.removeChild(loading);
+        return;
+    }
+
     var messageElement = document.createElement('li');
     messageElement.classList.add('no-list');
     messageElement.classList.add('font-arial');
@@ -241,8 +388,7 @@ function onMessageReceived(payload) {
     }
 
     var textElement = document.createElement('p');
-    var messageText = document.createTextNode(message.content);
-    textElement.appendChild(messageText);
+    textElement.innerHTML=message.content;
 
     messageElement.appendChild(textElement);
 

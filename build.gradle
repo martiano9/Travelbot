@@ -19,15 +19,13 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-reactor-netty'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation 'org.apache.commons:commons-text:1.2'
-    // https://mvnrepository.com/artifact/edu.stanford.nlp/stanford-corenlp
     implementation group: 'edu.stanford.nlp', name: 'stanford-corenlp', version: '3.9.2'
     implementation group: 'edu.stanford.nlp', name: 'stanford-corenlp', version: '3.9.2', classifier: 'models'
-    // https://mvnrepository.com/artifact/org.beykery/neuroph
-    implementation group: 'org.beykery', name: 'neuroph', version: '2.92'
-    // https://mvnrepository.com/artifact/nz.ac.waikato.cms.weka/weka-stable
     implementation group: 'nz.ac.waikato.cms.weka', name: 'weka-stable', version: '3.8.0'
-    implementation group: 'com.mashape.unirest', name: 'unirest-java', version: '1.4.9'
-    // https://mvnrepository.com/artifact/edu.stanford.nlp/stanford-pos-tagger
-    compile group: 'edu.stanford.nlp', name: 'stanford-pos-tagger', version: '3.0.2'
-
+    implementation group: 'edu.stanford.nlp', name: 'stanford-pos-tagger', version: '3.0.2'
+    implementation group: 'org.apache.opennlp', name: 'opennlp-tools', version: '1.8.3'
+    implementation 'com.google.maps:google-maps-services:0.9.3'
+    // https://mvnrepository.com/artifact/org.json/json
+    implementation group: 'org.json', name: 'json', version: '20180813'
+    implementation 'org.slf4j:slf4j-simple:1.7.25'
 }

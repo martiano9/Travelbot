@@ -1,0 +1,36 @@
+greeting hi
+greeting hello
+greeting how are you?
+greeting hey
+greeting hows it going
+greeting good morning
+greeting good evening
+greeting good afternoon
+greeting howdy
+greeting how're you?
+conversation-continue ok
+conversation-continue wow
+conversation-continue oh
+conversation-continue great
+conversation-continue that's great
+conversation-continue good
+conversation-continue no
+conversation-continue nah
+conversation-complete thanks
+conversation-complete thank you
+conversation-end goodbye
+conversation-end see you again
+conversation-end i have no more question
+restaurant-search nearby restaurant
+restaurant-search find near me
+restaurant-search best near me
+restaurant-type japanese
+restaurant-type chinese
+restaurant-type vietnamese
+restaurant-type korean
+restaurant-type mcdonald
+restaurant-type fast food
+restaurant-type fastfood
+restaurant-type dessert
+restaurant-type sweet
+restaurant-type cafe
