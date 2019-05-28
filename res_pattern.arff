@@ -1,0 +1,34 @@
+@relation restaurant
+
+@attribute AlternateNearby {Yes,No}
+@attribute FromHome {Yes,No}
+@attribute IsWeekends {Yes,No}
+@attribute Hungry {Yes,No}
+@attribute HowCrowded {None,Some,Full}
+@attribute Budget {$,$$,$$$}
+@attribute Raining {Yes,No}
+@attribute Reservations {Yes,No}
+@attribute Type {French,Thai,Burger,Italian,Vietnamese,Japanese,Chinese,Korean}
+@attribute WaitingTime {0-10,10-30,30-60,>60}
+@attribute WillWait {Yes,No}
+
+@data
+No,Yes,Yes,No,Full,$$,Yes,Yes,Japanese,>60,No
+Yes,Yes,Yes,Yes,Full,$$$,No,Yes,Italian,>60,Yes
+Yes,Yes,Yes,No,Full,$$$,No,Yes,Japanese,>60,No
+Yes,Yes,Yes,Yes,Full,$$$,No,Yes,Italian,10-30,No
+Yes,No,No,Yes,Some,$,No,No,Vietnamese,10-30,Yes
+Yes,No,No,Yes,Some,$,No,No,Vietnamese,10-30,Yes
+Yes,No,No,Yes,None,$,Yes,No,Chinese,0-10,Yes
+Yes,No,No,Yes,Full,$,No,No,Thai,30-60,No
+No,No,Yes,Yes,Some,$,No,No,Korean,10-30,No
+No,No,No,Yes,Some,$,Yes,Yes,Thai,0-10,Yes
+No,No,No,No,None,$,No,No,Thai,0-10,No
+Yes,No,No,Yes,Some,$,No,No,Vietnamese,10-30,Yes
+Yes,No,No,Yes,None,$$,Yes,No,Vietnamese,30-60,Yes
+No,Yes,No,Yes,Some,$$,Yes,Yes,Italian,30-60,Yes
+No,Yes,No,No,None,$$,Yes,No,Burger,0-10,No
+Yes,No,No,Yes,Some,$$,Yes,Yes,Vietnamese,10-30,Yes
+Yes,No,No,Yes,Some,$$,No,No,Thai,10-30,Yes
+Yes,No,No,Yes,Some,$$$,No,Yes,Japanese,0-10,Yes
+Yes,No,No,Yes,Some,$$$,No,No,Korean,30-60,Yes

@@ -15,6 +15,11 @@ import edu.stanford.nlp.pipeline.*;
 import edu.stanford.nlp.sentiment.SentimentCoreAnnotations;
 import edu.stanford.nlp.trees.*;
 
+import weka.classifiers.Classifier;
+import weka.classifiers.Evaluation;
+import weka.classifiers.trees.J48;
+
+import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.*;
@@ -22,11 +27,14 @@ import java.util.*;
 import edu.stanford.nlp.util.CoreMap;
 import edu.utas.travelbot.repository.CategoryDAO;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import weka.core.Instances;
+import weka.core.converters.ArffLoader;
 
 public class Bot {
     public double lat;
     public double lon;
 
+    private String[] cuisines = new String[]{"Vietnamese", "Chinese", "Thai", "Japanese"};
     private StanfordCoreNLP pipeline;
     private CategoryDAO categoryDAO;
 
@@ -45,8 +53,19 @@ public class Bot {
     private int userBudget;
     private int userWaiting;
     PlacesSearchResult[] results;
+    Evaluation j48Evaluation;
+    Classifier classifier;
 
     public Bot() {
+        // Init J48 Decision tree
+        Instances trainingDataSet = getDataSet("res_pattern.arff");
+        this.classifier = new J48();
+        try {
+            this.j48Evaluation = new Evaluation(trainingDataSet);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         // set up pipeline properties
         Properties props = new Properties();
         // set the list of annotators to run
@@ -60,6 +79,37 @@ public class Bot {
         context = new GeoApiContext.Builder()
                 .apiKey("AIzaSyAVxM30XgvxktwAKHZGZ2_jyMy61SUUL4U")
                 .build();
+    }
+
+    /**
+     * This method is to load the data set.
+     * @param fileName
+     * @return
+     * @throws IOException
+     */
+    public Instances getDataSet(String fileName) {
+        try {
+            /**
+             * we can set the file i.e., loader.setFile("finename") to load the data
+             */
+            int classIdx = 1;
+            /** the arffloader to load the arff file */
+            ArffLoader loader = new ArffLoader();
+            /** load the traing data */
+            loader.setSource(new File("categorizer.txt"));
+            /**
+             * we can also set the file like loader3.setFile(new
+             * File("test-confused.arff"));
+             */
+            //loader.setFile(new File(fileName));
+            Instances dataSet = loader.getDataSet();
+            /** set the index based on the data given in the arff files */
+            dataSet.setClassIndex(classIdx);
+            return dataSet;
+        } catch (IOException e) {
+
+        }
+        return null;
     }
 
     public ChatMessage ask(String question, SimpMessagingTemplate messagingTemplate, String username) {
@@ -196,8 +246,8 @@ public class Bot {
             String answer = getNERTag("NUMBER", nerTags, lemmas);
             this.userWaiting = wordtonum(answer);
 
-            // Prediction
-            String predictionType = "Japanese";
+            // J48 Prediction
+            String predictionType = j48Prediction();
 
             // Show results
             PlacesSearchResult[] results = searchRestaurant("");
@@ -269,6 +319,13 @@ public class Bot {
             // hide loading on client
             finish();
 
+            // reset bot
+            posipleNextCategory = "";
+            lastCategory = "";
+            userWaiting = -1;
+            userFromHome = false;
+            userBudget = -1;
+
             data.setContent(categoryDAO.getAnswer(category));
             messagingTemplate.convertAndSendToUser(username, "/chat", data);
         }
@@ -277,6 +334,10 @@ public class Bot {
         log("-");
 
         return data;
+    }
+
+    private String j48Prediction() {
+        return cuisines[(new Random()).nextInt(cuisines.length)];
     }
 
     private PlacesSearchResult[] searchRestaurant(String key) {

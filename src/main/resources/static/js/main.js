@@ -125,13 +125,13 @@ var voices = window.speechSynthesis.getVoices();
 
 function textToSpeech(txt) {
     if (speakEnabled) {
-        var msg = new SpeechSynthesisUtterance(txt);
+        var msg = new SpeechSynthesisUtterance(txt.replace(/<(.|\n)*?>/g, ''));
 
         // Txt to speech config
         msg.lang = 'en-US';
         msg.pitch = 1;
         msg.rate = 1;
-        msg.voice = voices[9];
+        msg.voice = voices[8];
         msg.voiceURI = 'native';
         msg.volume = 1;
 

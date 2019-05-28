@@ -21,16 +21,16 @@ public class CategoryDAO {
         questionAnswer.put("conversation-continue", "What else can I help you with?");
         questionAnswer.put("conversation-complete", "Nice chatting with you. Bye.");
         questionAnswer.put("restaurant-search", "I'm picking the best from the list for you. Visit these wonderful restaurants around your area");
-        questionAnswer.put("restaurant-price", "Can you give me the range of your budget? \n<br />" +
-                "\t1. $\n<br />" +
-                "\t2. $$\n<br />" +
-                "\t3. $$$\n<br />");
+        questionAnswer.put("restaurant-price", "Can you give me the range of your budget? \n<br/>" +
+                "\t1. $\n<br/>" +
+                "\t2. $$\n<br/>" +
+                "\t3. $$$\n<br/>");
         questionAnswer.put("restaurant-from", "Are you going to the restaurant from home?");
         questionAnswer.put("restaurant-waiting", "What is your maximum waiting time?\n<br />" +
-                "\t1. 0-10 mins\n<br />" +
-                "\t2. 10-30 mins\n<br />" +
-                "\t3. 30-60 mins\n<br />" +
-                "\t4. >60 mins\n<br />");
+                "\t1. 0-10 mins\n<br/>" +
+                "\t2. 10-30 mins\n<br/>" +
+                "\t3. 30-60 mins\n<br/>" +
+                "\t4. >60 mins\n<br/>");
         questionAnswer.put("restaurant-type", "What is your favorite cuisine? Chinese, Japanese, Vietnamese, Malaysian or Thai?");
         questionAnswer.put("restaurant-satisfy", "Are you satisfied with my suggestion?");
         questionAnswer.put("restaurant-more", "Look like you are happy with the result set. If you need further assistant, you can ask me the direction to one of the suggested restaurants or you can ask me to show you more details.");
